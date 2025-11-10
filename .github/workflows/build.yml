@@ -42,6 +42,9 @@ jobs:
       - name: Compile and test scala3doc-js
         run: ./project/scripts/sbt scaladoc-js-main/test
 
+      - run: |
+          sed -i 's/"-social-links:"/"-dynamic-side-menu", "-social-links:"/' project/Build.scala
+
       - name: Compile and test
         run: |
           ./project/scripts/sbt scaladoc/test
