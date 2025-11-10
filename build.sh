@@ -4,10 +4,10 @@ latest="$(gh release list --repo scala/scala3 --exclude-pre-releases --exclude-d
 
 [[ -n "$latest" ]]
 
-wget https://repo1.maven.org/maven2/org/scala-lang/scala3-library_3/$latest/scala3-library_3-$latest-javadoc.jar -O scala.jar
+# wget https://repo1.maven.org/maven2/org/scala-lang/scala3-library_3/$latest/scala3-library_3-$latest-javadoc.jar -O scala.jar
 
-rm -rf api
-mkdir -p api/3.x
-unzip scala.jar -d api/3.x
+# unzip scala.jar -d dist/api/3.x
 
+cd dist
+wget https://www.scala-lang.org/api/3.x/ --recursive --no-parent
 
