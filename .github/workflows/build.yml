@@ -69,6 +69,8 @@ jobs:
           sed -i 's|document\.querySelectorAll("a")|[]|g' **/ux.js
           sed -i 's|https\?://dotty\.epfl\.ch/\?|/|g' **/*.html
 
+          echo 'Not found' > 404.html
+
       - uses: actions/upload-artifact@v4
         with:
           path: scaladoc/output/scala3
@@ -100,8 +102,8 @@ jobs:
       - uses: actions/download-artifact@v5
         with:
           merge-multiple: true
-      - run: du -h -s .
-      - run: tar caf /tmp/scala-docs.tar.zst . && ls -lh /tmp/*.zst
+      - run: tar caf /tmp/scala-docs.tar.zst .
+      - run: du -h -s . /tmp/*.zst
       - run: |
           gh release view "$VERSION" $repo --json name,assets || gh release create "$VERSION" /tmp/scala-docs.tar.zst $repo
         env:
