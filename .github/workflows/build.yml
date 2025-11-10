@@ -107,7 +107,7 @@ jobs:
       - run: |
           gh release view "$VERSION" $repo --json name,assets || gh release create "$VERSION" /tmp/scala-docs.tar.zst $repo
         env:
-          repo: "--repo=scala/scala3"
+          repo: "--repo=${{ github.repository }}"
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ needs.build.outputs.version }}
           PAGER: ""
