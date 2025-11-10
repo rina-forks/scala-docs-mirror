@@ -103,8 +103,10 @@ jobs:
       - run: du -h -s .
       - run: tar caf /tmp/scala-docs.tar.zst . && ls -lh /tmp/*.zst
       - run: |
-          PAGER= gh release view "$VERSION" --json name,assets || gh release create "$VERSION" /tmp/scala-docs.tar.zst
+          gh release view "$VERSION" $repo --json name,assets || gh release create "$VERSION" /tmp/scala-docs.tar.zst $repo
         env:
+          repo: "--repo=scala/scala3"
           GH_TOKEN: ${{ github.token }}
           VERSION: ${{ needs.build.outputs.version }}
+          PAGER: ""
 
