@@ -63,7 +63,48 @@ jobs:
       - name: Generate Scala 3 documentation
         run: ./project/scripts/sbt scaladoc/generateScalaDocumentation
 
+      - run: |
+          cd scaladoc/output/scala3
+          shopt -s globstar
+          sed -i 's|document\.querySelectorAll("a")|[]|g' **/ux.js
+          sed -i 's|https\?://dotty\.epfl\.ch/\?|/|g' **/*.html
+
       - uses: actions/upload-artifact@v4
         with:
-          path: scaladoc/output
+          path: scaladoc/output/scala3
           overwrite: true
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      deployments: write
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          merge-multiple: true
+      - uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy . --project-name=${{ secrets.CLOUDFLARE_PROJECT_NAME }}
+          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          merge-multiple: true
+      - run: tar caf /tmp/scala-docs.tar.zst .
+      - run: |
+          gh release create '${{ steps.get.outputs.version }}' /tmp/scala-docs.tar.zst
+        env:
+          GH_TOKEN: ${{ github.token }}
+
+
+
