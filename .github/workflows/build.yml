@@ -100,11 +100,11 @@ jobs:
       - uses: actions/download-artifact@v5
         with:
           merge-multiple: true
-      - run: tar caf /tmp/scala-docs.tar.zst .
+      - run: du -h -s .
+      - run: tar caf /tmp/scala-docs.tar.zst . && ls -lh /tmp/*.zst
       - run: |
-          gh release create '${{ steps.get.outputs.version }}' /tmp/scala-docs.tar.zst
+          PAGER= gh release view "$VERSION" --json name,assets || gh release create "$VERSION" /tmp/scala-docs.tar.zst
         env:
           GH_TOKEN: ${{ github.token }}
-
-
+          VERSION: ${{ needs.build.outputs.version }}
 
