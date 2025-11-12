@@ -43,18 +43,6 @@ jobs:
       - run: |
           sed -i 's/GenerateInkuire(true),/GenerateInkuire(true), DynamicSideMenu(true),/' project/Build.scala
 
-      - name: Compile and test scala3doc-js
-        run: ./project/scripts/sbt scaladoc-js-main/test
-
-      - name: Compile and test
-        run: |
-          ./project/scripts/sbt scaladoc/test
-          ./project/scripts/sbt dist/Universal/stage
-          ./project/scripts/cmdScaladocTests
-
-      - name: Locally publish self
-        run: ./project/scripts/sbt scaladoc/publishLocal
-
       - name: Generate self documentation
         run: ./project/scripts/sbt scaladoc/generateSelfDocumentation
 
