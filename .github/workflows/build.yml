@@ -41,7 +41,7 @@ jobs:
       - uses: sbt/setup-sbt@v1
 
       - run: |
-          sed -i 's/"-social-links:"/"-dynamic-side-menu", "-social-links:"/' project/Build.scala
+          sed -i 's/GenerateInkuire(true),/GenerateInkuire(true), DynamicSideMenu(true),/' project/Build.scala
 
       - name: Compile and test scala3doc-js
         run: ./project/scripts/sbt scaladoc-js-main/test
